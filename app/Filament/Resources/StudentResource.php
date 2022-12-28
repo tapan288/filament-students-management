@@ -2,19 +2,22 @@
 
 namespace App\Filament\Resources;
 
-use App\Exports\StudentsExport;
 use Filament\Forms;
 use Filament\Tables;
+use App\Models\Classes;
 use App\Models\Section;
 use App\Models\Student;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
+use App\Exports\StudentsExport;
 use Filament\Resources\Resource;
+use Filament\Tables\Filters\Filter;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use App\Filament\Resources\StudentResource\Pages;
@@ -92,7 +95,42 @@ class StudentResource extends Resource
                     ->searchable()
             ])
             ->filters([
-                //
+                Filter::make('class-section-filter')
+                    ->form([
+                        Select::make('class_id')
+                            ->label('Filter By Class')
+                            ->placeholder('Select a Class')
+                            ->options(
+                                Classes::pluck('name', 'id')->toArray()
+                            )
+                            ->afterStateUpdated(
+                                fn (callable $set) => $set('section_id', null)
+                            ),
+                        Select::make('section_id')
+                            ->label('Filter By Section')
+                            ->placeholder('Select a Section')
+                            ->options(
+                                function (callable $get) {
+                                    $classId = $get('class_id');
+
+                                    if ($classId) {
+                                        return Section::where('class_id', $classId)->pluck('name', 'id')->toArray();
+                                    }
+                                }
+                            ),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['class_id'],
+                                fn (Builder $query, $record): Builder => $query->where('class_id', $record),
+                            )
+                            ->when(
+                                $data['section_id'],
+                                fn (Builder $query, $record): Builder => $query->where('section_id', $record),
+                            );
+                    })
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
