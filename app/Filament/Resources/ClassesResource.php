@@ -5,9 +5,11 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Classes;
+use App\Models\Section;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
 use Filament\Resources\Resource;
+use Filament\Tables\Columns\TagsColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\DeleteAction;
@@ -39,7 +41,11 @@ class ClassesResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->sortable()
+                    ->sortable(),
+                TagsColumn::make('sections.name'),
+                TextColumn::make('students_count')
+                    ->counts('students')
+                    ->label('Students Count'),
             ])
             ->filters([
                 //
