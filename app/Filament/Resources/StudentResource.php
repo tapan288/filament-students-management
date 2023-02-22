@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Collection;
 use App\Filament\Resources\StudentResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\StudentResource\RelationManagers;
+use Filament\Tables\Actions\Action;
 
 class StudentResource extends Resource
 {
@@ -82,11 +83,11 @@ class StudentResource extends Resource
                     ->sortable()
                     ->searchable()
                     ->toggleable(),
-                TextColumn::make('address')
-                    ->sortable()
-                    ->searchable()
-                    ->toggleable()
-                    ->wrap(),
+                // TextColumn::make('address')
+                //     ->sortable()
+                //     ->searchable()
+                //     ->toggleable()
+                //     ->wrap(),
 
                 TextColumn::make('class.name')
                     ->sortable()
@@ -137,6 +138,10 @@ class StudentResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 DeleteAction::make(),
+                Action::make('Download Pdf')
+                    ->icon('heroicon-o-document-download')
+                    ->url(fn (Student $record) => route('student.pdf.download', $record))
+                    ->openUrlInNewTab(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
