@@ -142,6 +142,10 @@ class StudentResource extends Resource
                     ->icon('heroicon-o-document-download')
                     ->url(fn (Student $record) => route('student.pdf.download', $record))
                     ->openUrlInNewTab(),
+
+                Action::make('View Qr Code')
+                    ->icon('heroicon-o-qrcode')
+                    ->url(fn (Student $record) => static::getUrl('qr-code', $record)),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
@@ -165,6 +169,7 @@ class StudentResource extends Resource
             'index' => Pages\ListStudents::route('/'),
             'create' => Pages\CreateStudent::route('/create'),
             'edit' => Pages\EditStudent::route('/{record}/edit'),
+            'qr-code' => Pages\ViewQrCode::route('/{record}/qr-code'),
         ];
     }
 
