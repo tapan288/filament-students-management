@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Livewire\Auth\Login;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Http\Middleware\MirrorConfigToSubpackages;
@@ -88,7 +87,7 @@ return [
     'auth' => [
         'guard' => env('FILAMENT_AUTH_GUARD', 'web'),
         'pages' => [
-            'login' => Login::class,
+            'login' => \Filament\Http\Livewire\Auth\Login::class,
         ],
     ],
 
