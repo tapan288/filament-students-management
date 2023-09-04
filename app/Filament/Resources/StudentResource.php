@@ -107,7 +107,7 @@ class StudentResource extends Resource
                                 Classes::pluck('name', 'id')->toArray()
                             )
                             ->afterStateUpdated(
-                                fn (callable $set) => $set('section_id', null)
+                                fn(callable $set) => $set('section_id', null)
                             ),
                         Select::make('section_id')
                             ->label('Filter By Section')
@@ -126,11 +126,11 @@ class StudentResource extends Resource
                         return $query
                             ->when(
                                 $data['class_id'],
-                                fn (Builder $query, $record): Builder => $query->where('class_id', $record),
+                                fn(Builder $query, $record): Builder => $query->where('class_id', $record),
                             )
                             ->when(
                                 $data['section_id'],
-                                fn (Builder $query, $record): Builder => $query->where('section_id', $record),
+                                fn(Builder $query, $record): Builder => $query->where('section_id', $record),
                             );
                     })
 
@@ -140,19 +140,19 @@ class StudentResource extends Resource
                 DeleteAction::make(),
                 Action::make('Download Pdf')
                     ->icon('heroicon-o-document-arrow-down')
-                    ->url(fn (Student $record) => route('student.pdf.download', $record))
+                    ->url(fn(Student $record): string => route('student.pdf.download', ['record' => $record]))
                     ->openUrlInNewTab(),
 
                 Action::make('View Qr Code')
                     ->icon('heroicon-o-qr-code')
-                    ->url(fn (Student $record) => static::getUrl('qr-code', $record)),
+                    ->url(fn(Student $record): string => static::getUrl('qr-code', ['record' => $record])),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
                 BulkAction::make('export')
                     ->label('Export Selected')
                     ->icon('heroicon-o-document-arrow-down')
-                    ->action(fn (Collection $records) => (new StudentsExport($records))->download('students.xlsx'))
+                    ->action(fn(Collection $records) => (new StudentsExport($records))->download('students.xlsx'))
             ]);
     }
 
