@@ -6,8 +6,8 @@ use Filament\Forms;
 use Filament\Tables;
 use App\Models\Classes;
 use App\Models\Section;
-use Filament\Resources\Form;
-use Filament\Resources\Table;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Tables\Columns\TagsColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -24,7 +24,7 @@ class ClassesResource extends Resource
 
     protected static ?string $navigationGroup = 'Academic Management';
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {

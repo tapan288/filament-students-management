@@ -7,8 +7,8 @@ use Filament\Tables;
 use App\Models\Classes;
 use App\Models\Section;
 use App\Models\Student;
-use Filament\Resources\Form;
-use Filament\Resources\Table;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
 use App\Exports\StudentsExport;
 use Filament\Resources\Resource;
 use Filament\Tables\Filters\Filter;
@@ -139,19 +139,19 @@ class StudentResource extends Resource
                 Tables\Actions\EditAction::make(),
                 DeleteAction::make(),
                 Action::make('Download Pdf')
-                    ->icon('heroicon-o-document-download')
+                    ->icon('heroicon-o-document-arrow-down')
                     ->url(fn (Student $record) => route('student.pdf.download', $record))
                     ->openUrlInNewTab(),
 
                 Action::make('View Qr Code')
-                    ->icon('heroicon-o-qrcode')
+                    ->icon('heroicon-o-qr-code')
                     ->url(fn (Student $record) => static::getUrl('qr-code', $record)),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
                 BulkAction::make('export')
                     ->label('Export Selected')
-                    ->icon('heroicon-o-document-download')
+                    ->icon('heroicon-o-document-arrow-down')
                     ->action(fn (Collection $records) => (new StudentsExport($records))->download('students.xlsx'))
             ]);
     }
@@ -173,7 +173,7 @@ class StudentResource extends Resource
         ];
     }
 
-    protected static function getNavigationBadge(): ?string
+    public static function getNavigationBadge(): ?string
     {
         return self::$model::count();
     }

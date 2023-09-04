@@ -12,7 +12,7 @@ class ViewQrCode extends ViewRecord
 
     protected static string $view = 'filament.resources.student-resource.pages.view-qr-code';
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [];
     }

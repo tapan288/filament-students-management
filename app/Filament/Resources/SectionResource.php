@@ -6,8 +6,8 @@ use Closure;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Section;
-use Filament\Resources\Form;
-use Filament\Resources\Table;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
 use Illuminate\Validation\Rule;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
@@ -26,7 +26,7 @@ class SectionResource extends Resource
 
     protected static ?string $navigationGroup = 'Academic Management';
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
@@ -35,7 +35,7 @@ class SectionResource extends Resource
                 TextInput::make('name')
                     ->required()
                     ->autofocus()
-                    ->unique(ignoreRecord: true, callback: function (Closure $get, Unique $rule) {
+                    ->unique(ignoreRecord: true, callback: function (\Filament\Forms\Get $get, Unique $rule) {
                         return $rule->where('class_id', $get('class_id'));
                     })
                     ->placeholder('Enter Section Name'),
