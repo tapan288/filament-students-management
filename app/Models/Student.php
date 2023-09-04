@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Student extends Model
+class Student extends Authenticatable
 {
     use HasFactory;
+
+    protected $guard = "student";
 
     protected $fillable = [
         'section_id',
@@ -18,7 +20,7 @@ class Student extends Model
         'phone_number',
     ];
 
-    public function class()
+    public function class ()
     {
         return $this->belongsTo(Classes::class, 'class_id');
     }
