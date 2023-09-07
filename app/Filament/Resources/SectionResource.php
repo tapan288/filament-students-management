@@ -15,10 +15,8 @@ use Filament\Tables\Columns\TextColumn;
 use Illuminate\Validation\Rules\Unique;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\DeleteAction;
-use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Columns\Summarizers\Average;
 use App\Filament\Resources\SectionResource\Pages;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\SectionResource\RelationManagers;
 
 class SectionResource extends Resource
 {
@@ -35,7 +33,7 @@ class SectionResource extends Resource
                 TextInput::make('name')
                     ->required()
                     ->autofocus()
-                    ->unique(ignoreRecord: true, callback: function (\Filament\Forms\Get $get, Unique $rule) {
+                    ->unique(ignoreRecord: true, modifyRuleUsing: function (\Filament\Forms\Get $get, Unique $rule) {
                         return $rule->where('class_id', $get('class_id'));
                     })
                     ->placeholder('Enter Section Name'),
@@ -56,6 +54,9 @@ class SectionResource extends Resource
                     ->searchable(),
                 TextColumn::make('students_count')
                     ->counts('students')
+                    ->summarize([
+                        Average::make(),
+                    ])
                     ->label('Students Count'),
             ])
             ->filters([
